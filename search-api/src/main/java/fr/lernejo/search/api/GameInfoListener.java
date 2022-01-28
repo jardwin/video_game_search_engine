@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 
 @Component
-public final class GameInfoListener {
+public class GameInfoListener {
     private final RestHighLevelClient elasticRestClient;
 
     public GameInfoListener(RestHighLevelClient restClient){

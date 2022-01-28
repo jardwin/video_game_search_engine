@@ -42,9 +42,13 @@ public class Launcher {
             RabbitTemplate publisher = springContext.getBean(RabbitTemplate.class);
             for(JsonNode game : gamesList){
                 if(!game.isEmpty() && game.has("id")){
-                    publisher.send(GAME_INFO_QUEUE,MessageBuilder.withBody(game.toPrettyString().getBytes())
-                        .setHeader("content_type", "application/json")
-                        .setHeader("game_id", game.get("id")).build());
+                    try {
+                        publisher.send(GAME_INFO_QUEUE,MessageBuilder.withBody(game.toPrettyString().getBytes())
+                            .setHeader("content_type", "application/json")
+                            .setHeader("game_id", game.get("id")).build());
+                    }catch (Exception e){
+                        System.out.println("Can't send to rabbit queue");
+                    }
                 }
             }
             System.out.println("Hello after starting Spring");
