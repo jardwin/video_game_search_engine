@@ -10,3 +10,5 @@ The project requires a JDK 17 (recommended distribution is Temurin from [Adoptiu
 From there, simply use the Maven wrapper to launch all tests (unit tests & integration tests).
 
 `./mvnw verify`
+
+Consigne https://github.com/lernejo/exercises/blob/master/projects/spring_rabbitmq_es_fr/VIDEO_GAME_SEARCH_ENGINE.adoc

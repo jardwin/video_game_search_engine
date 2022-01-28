@@ -17,16 +17,16 @@ public class ElasticSearchConfiguration {
 
     @Bean
     public RestHighLevelClient restHighLevelClient(
-        @Value("${elasticsearch.host:localhost}") String host,
-        @Value("${elasticsearch.port:9200}") int port,
-        @Value("${elasticsearch.username:elastic}") String userName,
-        @Value("${elasticsearch.password:admin}") String password){
+        final @Value("${elasticsearch.host:localhost}") String host,
+        final @Value("${elasticsearch.port:9200}") int port,
+        final @Value("${elasticsearch.username:elastic}") String userName,
+        final @Value("${elasticsearch.password:admin}") String password){
         //Init the crédential to provied username and password
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName,password));
 
         //Create a RestClientBuild by passing server host and credential
-        RestClientBuilder builder = RestClient.builder(new HttpHost(host, port, "http"))
+        final RestClientBuilder builder = RestClient.builder(new HttpHost(host, port, "http"))
             .setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
 
         return new RestHighLevelClient(builder);
