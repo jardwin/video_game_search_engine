@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@SuppressWarnings("ALL")
 @Configuration
 public class ElasticSearchConfiguration {
 
@@ -21,7 +22,7 @@ public class ElasticSearchConfiguration {
         final @Value("${elasticsearch.port:9200}") int port,
         final @Value("${elasticsearch.username:elastic}") String userName,
         final @Value("${elasticsearch.password:admin}") String password){
-        //Init the crédential to provied username and password
+        //Init the credential to provide username and password
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName,password));
 
@@ -30,5 +31,5 @@ public class ElasticSearchConfiguration {
             .setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
 
         return new RestHighLevelClient(builder);
-    };
+    }
 }

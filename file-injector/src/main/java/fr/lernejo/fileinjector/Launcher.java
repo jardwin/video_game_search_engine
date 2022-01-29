@@ -1,54 +1,46 @@
 package fr.lernejo.fileinjector;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.util.MimeType;
+import org.springframework.util.MimeTypeUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 
 @SpringBootApplication
 public class Launcher {
     private static final String GAME_INFO_QUEUE = "game_info";
+    private static final String GAME_ID_HEADER = "game_id";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.out.println("No argument paste to file integrator or No file exist");
-            return;
-        }
-        File file = new File(args[0]);
-        JsonNode gamesList;
-        ObjectMapper objectMapper = new ObjectMapper();
-        if(file .exists()){
-            try {
-                gamesList = objectMapper.readTree(file);
-            }catch (Exception e){
-                System.out.println("Error during deserialization : "+e.getMessage());
-                return;
-            }
-        }else{
-            System.out.println("File not exist");
+    public static void main(String[] args) {
+        final File file;
+        final JsonNode gamesList;
+        try {
+            file = new File(args[0]);
+            gamesList = objectMapper.readTree(file);
+        } catch (Exception e) {
+            System.out.println("Can't get or read the file : " + e.getMessage());
             return;
         }
 
         try (AbstractApplicationContext springContext = new AnnotationConfigApplicationContext(Launcher.class)) {
-            RabbitTemplate publisher = springContext.getBean(RabbitTemplate.class);
-            for(JsonNode game : gamesList){
-                if(!game.isEmpty() && game.has("id")){
-                    try {
-                        publisher.send(GAME_INFO_QUEUE,MessageBuilder.withBody(game.toPrettyString().getBytes())
-                            .setHeader("content_type", "application/json")
-                            .setHeader("game_id", game.get("id")).build());
-                    }catch (Exception e){
-                        System.out.println("Can't send to rabbit queue");
-                    }
+            final RabbitTemplate publisher = springContext.getBean(RabbitTemplate.class);
+            for (JsonNode game : gamesList) {
+                try {
+                    Message message = MessageBuilder.withBody(game.toPrettyString().getBytes())
+                        .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                        .setHeader(GAME_ID_HEADER, game.get("id")).build();
+                    publisher.send(GAME_INFO_QUEUE, message);
+                } catch (Exception e) {
+                    System.out.println("Can't send to rabbit queue");
                 }
             }
             System.out.println("Hello after starting Spring");

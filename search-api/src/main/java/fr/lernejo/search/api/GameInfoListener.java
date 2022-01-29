@@ -10,19 +10,23 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("deprecation")
 @Component
 public class GameInfoListener {
     private final RestHighLevelClient elasticRestClient;
+    private static final String GAME_INDEX = "games";
+    private static final String GAME_ID_HEADER = "game_id";
 
     public GameInfoListener(RestHighLevelClient restClient){
         elasticRestClient = restClient;
     }
 
     @RabbitListener(queues = AmqpConfiguration.GAME_INFO_QUEUE)
-    public void onMessage(Message message){
-        IndexRequest request = new IndexRequest(
-            "games","object", message.getMessageProperties().getHeader("game_id"));
-        request.source(new String(message.getBody(), StandardCharsets.UTF_8), XContentType.JSON);
+    public void onMessage(final Message message){
+        final IndexRequest request = new IndexRequest(GAME_INDEX)
+        .id(message.getMessageProperties().getHeader(GAME_ID_HEADER))
+        .source(new String(message.getBody(), StandardCharsets.UTF_8), XContentType.JSON);
+
         try {
             elasticRestClient.index(request, RequestOptions.DEFAULT);
         }catch (Exception e){

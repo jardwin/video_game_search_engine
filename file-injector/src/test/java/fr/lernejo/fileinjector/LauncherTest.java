@@ -2,7 +2,6 @@ package fr.lernejo.fileinjector;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
