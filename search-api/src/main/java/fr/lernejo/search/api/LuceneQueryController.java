@@ -18,9 +18,9 @@ import java.util.Map;
 @RestController
 public class LuceneQueryController {
 
-    private final RestHighLevelClient elasticClient;
+    private final RestHighLevelClientWrapper elasticClient;
 
-    public LuceneQueryController(RestHighLevelClient client){
+    public LuceneQueryController(RestHighLevelClientWrapper client){
         elasticClient = client;
     }
 

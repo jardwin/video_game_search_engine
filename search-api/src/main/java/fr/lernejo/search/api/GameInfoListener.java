@@ -13,11 +13,11 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("deprecation")
 @Component
 public class GameInfoListener {
-    private final RestHighLevelClient elasticRestClient;
+    private final RestHighLevelClientWrapper elasticRestClient;
     private static final String GAME_INDEX = "games";
     private static final String GAME_ID_HEADER = "game_id";
 
-    public GameInfoListener(RestHighLevelClient restClient){
+    public GameInfoListener(RestHighLevelClientWrapper restClient){
         elasticRestClient = restClient;
     }
 
@@ -30,7 +30,7 @@ public class GameInfoListener {
         try {
             elasticRestClient.index(request, RequestOptions.DEFAULT);
         }catch (Exception e){
-            System.out.println("Can't index game, error : "+e.getMessage());
+            System.err.println("Can't index game, Error : "+e.getMessage());
         }
     }
 }

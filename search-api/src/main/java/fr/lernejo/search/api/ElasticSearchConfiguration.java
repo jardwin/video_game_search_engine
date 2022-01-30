@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class ElasticSearchConfiguration {
 
     @Bean
-    public RestHighLevelClient restHighLevelClient(
+    public RestHighLevelClientWrapper RestHighLevelClientWrapper(
         final @Value("${elasticsearch.host:localhost}") String host,
         final @Value("${elasticsearch.port:9200}") int port,
         final @Value("${elasticsearch.username:elastic}") String userName,
@@ -30,6 +30,6 @@ public class ElasticSearchConfiguration {
         final RestClientBuilder builder = RestClient.builder(new HttpHost(host, port, "http"))
             .setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
 
-        return new RestHighLevelClient(builder);
+        return new RestHighLevelClientImpl(new RestHighLevelClient(builder));
     }
 }

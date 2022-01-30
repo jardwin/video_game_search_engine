@@ -1,7 +1,7 @@
 # Template for the Video Game Search Engine project@RequestParam String id
 
-[![build workflow](https://github.com/lernejo/video_game_search_engine_template/actions/workflows/build.yml/badge.svg)](https://github.com/lernejo/video_game_search_engine_template/actions)
-[![codecov](https://codecov.io/gh/lernejo/video_game_search_engine_template/branch/main/graph/badge.svg)](https://codecov.io/gh/lernejo/video_game_search_engine_template)
+[![build workflow](https://github.com/jardwin/video_game_search_engine/actions/workflows/build.yml/badge.svg)](https://github.com/jardwin/video_game_search_engine/actions)
+[![codecov](https://codecov.io/gh/jardwin/video_game_search_engine/branch/main/graph/badge.svg)](https://codecov.io/gh/jardwin/video_game_search_engine)
 
 ## Build the project
 
@@ -10,5 +10,3 @@ The project requires a JDK 17 (recommended distribution is Temurin from [Adoptiu
 From there, simply use the Maven wrapper to launch all tests (unit tests & integration tests).
 
 `./mvnw verify`
-
-Consigne https://github.com/lernejo/exercises/blob/master/projects/spring_rabbitmq_es_fr/VIDEO_GAME_SEARCH_ENGINE.adoc
